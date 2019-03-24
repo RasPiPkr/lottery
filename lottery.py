@@ -58,11 +58,6 @@ class Lottery:
         temp = temp.replace(']', '')
         return temp
 
-os.system('clear')
-print('**************************************************')
-print('   Press Ctrl + c, to exit program at any time.')
-print('\n    Welcome to Martin Parker\'s lottery picker.\n')
-
 while True:
     picked_numbers = []
     picked_star_picks = []
@@ -74,8 +69,7 @@ while True:
         os.system('clear')
         print('**************************************************')
         if goes >= 1:
-            print('**************************************************')
-            print('    SCROLL UP FOR NUMBERS IF YOU MISSED THEM')
+            print('     SCROLL UP FOR NUMBERS IF YOU MISSED THEM')
             print('**************************************************')
         print('   Press Ctrl + c, to exit program at any time.')
         print('\n    Welcome to Martin Parker\'s lottery picker.\n')
