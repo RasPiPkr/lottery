@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import random, time, sys, re
+import random, time, sys, re, os
 
 ''' THIS SCRIPT WAS INTENDED FOR LEARNING PURPOSES ONLY!!!
 I (Martin Parker) will not be held responsible for any debt caused or
@@ -12,6 +12,8 @@ The custom option is so you can create a raffle or for your lottery in your area
 '''
 
 # Works in python3 idle, or run sudo python3 ./lottery.py in terminal.
+
+goes = 0
 
 class Lottery:
     
@@ -56,6 +58,7 @@ class Lottery:
         temp = temp.replace(']', '')
         return temp
 
+os.system('clear')
 print('**************************************************')
 print('   Press Ctrl + c, to exit program at any time.')
 print('\n    Welcome to Martin Parker\'s lottery picker.\n')
@@ -68,6 +71,14 @@ while True:
     global star_numbers
     star_numbers = []
     try:
+        os.system('clear')
+        print('**************************************************')
+        if goes >= 1:
+            print('**************************************************')
+            print('    SCROLL UP FOR NUMBERS IF YOU MISSED THEM')
+            print('**************************************************')
+        print('   Press Ctrl + c, to exit program at any time.')
+        print('\n    Welcome to Martin Parker\'s lottery picker.\n')
         print('**************************************************')
         print('Please choose: 1= Health Lottery, 2= National Lottery, 3= Custom Raffle/Lottery.')
         get_lottery = int(input('\nSelect lottery?'))
@@ -152,4 +163,5 @@ while True:
         print('\nExiting script')
         sys.exit()
     print('\nGOOD LUCK!!!\n')
+    goes += 1
     time.sleep(2)
