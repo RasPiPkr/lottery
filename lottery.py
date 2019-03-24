@@ -158,4 +158,4 @@ while True:
         sys.exit()
     print('\nGOOD LUCK!!!\n')
     goes += 1
-    time.sleep(2)
+    time.sleep(5)
