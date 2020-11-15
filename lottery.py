@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import random, time, sys, re, os
-
+#
 ''' THIS SCRIPT WAS INTENDED FOR LEARNING PURPOSES ONLY!!!
 I (Martin Parker) will not be held responsible for any debt caused or
 dissappointment in losing your money.
