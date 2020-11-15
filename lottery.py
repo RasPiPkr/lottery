@@ -12,7 +12,7 @@ The custom option is so you can create a raffle or for your lottery in your area
 '''
 
 # Works in python3 idle, or run sudo python3 ./lottery.py in terminal.
-# Testing
+# Test
 goes = 0
 
 class Lottery:
