@@ -12,11 +12,11 @@ The custom option is so you can create a raffle or for your lottery in your area
 '''
 
 # Works in python3 idle, or run sudo python3 ./lottery.py in terminal.
-
+# Test
 goes = 0
 
 class Lottery:
-    
+
     def __init__(self, main_low_range, main_high_range, main_picks, is_star_picks, star_low_range, star_high_range, star_picks):
         self.main_low_range = main_low_range
         self.main_high_range = main_high_range + 1
