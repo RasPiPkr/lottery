@@ -16,7 +16,7 @@ startupMode = dark
 def changeMode(bgMode, txtMode):
     root.config(bg=bgMode)
     menu.config(bg=bgMode, fg=txtMode)
-
+    dispFrame.config(bg=bgMode)
 
 def getNumbers(tickets, main_low, main_high, main_picks, is_star_picks, star_low_range, star_high_range, star_picks):
     for ticket in range(int(tickets)):
@@ -33,6 +33,7 @@ def getNumbers(tickets, main_low, main_high, main_picks, is_star_picks, star_low
 
 def healthLottery():
     global dispFrame, showTickets
+    dispFrame.destroy()
     currBG = menu['bg']
     currFG = menu['fg']
     dispFrame = tk.Frame(root, bg=currBG)
@@ -47,7 +48,19 @@ def healthLottery():
     getTickets.pack(pady=10)
     showTickets = tk.Listbox(dispFrame, width=20, height=10)
     showTickets.pack()
-    
+
+
+def nationalLottery():
+    global dispFrame, showTickets
+    dispFrame.destroy()
+    currBG = menu['bg']
+    currFG = menu['fg']
+    dispFrame = tk.Frame(root, bg=currBG)
+    dispFrame.pack(fill='both', expand=True)
+    lines = [str(i).zfill(2) for i in range(1, 51)]
+    linesLabel = tk.Label(dispFrame, text='How many lines:', bg=currBG, fg=currFG)
+    linesLabel.pack(pady=10)
+
 
 
 # Setup root window
@@ -66,7 +79,7 @@ menu.add_cascade(label='File', menu=filemenu)
 filemenu.add_command(label='Exit', command=root.destroy)
 filemenu.add_separator()
 filemenu.add_command(label='UK Health Lottery', command=healthLottery)
-filemenu.add_command(label='UK National Lottery')
+filemenu.add_command(label='UK National Lottery', command=nationalLottery)
 filemenu.add_separator()
 filemenu.add_command(label='Custom Raffle')
 filemenu.add_separator()
@@ -75,6 +88,9 @@ filemenu.add_command(label='Dark Mode', command=lambda: changeMode(dark, light))
 helpmenu = tk.Menu(menu) 
 menu.add_cascade(label='Help', menu=helpmenu) 
 helpmenu.add_command(label='About')
+
+dispFrame = tk.Frame(root)
+dispFrame.pack(fill='both', expand=True)
 
 
 if startupMode == dark: # Depending on the startup mode this will set to light or dark mode.
