@@ -1,5 +1,9 @@
 #!/usr/bin/python3
-import random, time, sys, re, os
+##import tkinter as tk
+import random
+import time
+import sys
+import os
 
 ''' THIS SCRIPT WAS INTENDED FOR LEARNING PURPOSES ONLY!!!
 I (Martin Parker) will not be held responsible for any debt caused or
@@ -12,7 +16,6 @@ The custom option is so you can create a raffle or for your lottery in your area
 '''
 
 # Works in python3 idle, or run sudo python3 ./lottery.py in terminal.
-# Test
 goes = 0
 
 class Lottery:
