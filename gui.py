@@ -12,6 +12,7 @@ light = '#bcbcbc'
 dark = '#23272a'
 startupMode = dark
 numbers = [i for i in range(1, 1000001)] # Custom stars / raffle number range.
+ticketFont = ('verdana', 20)
 
 
 def changeMode(bgMode, txtMode):
@@ -20,10 +21,8 @@ def changeMode(bgMode, txtMode):
     dispFrame.config(bg=bgMode)
 
 def getNumbers(tickets, main_low, main_high, main_picks, has_stars, star_low, star_high, star_picks):
-    print(tickets, main_low, main_high, main_picks, has_stars, star_low, star_high, star_picks)
     for ticket in range(int(tickets)):
         nums = [i for i in range(main_low, main_high + 1)]
-        print(nums)
         picked = []
         for i in range(main_picks):
             pick = random.choice(nums)
@@ -33,7 +32,6 @@ def getNumbers(tickets, main_low, main_high, main_picks, has_stars, star_low, st
         picked.sort()
         if has_stars == True:
             starNums = [i for i in range(star_low, star_high + 1)]
-            print(starNums)
             pickedStars = []
             for i in range(star_picks):
                 pickStar = random.choice(starNums)
@@ -42,7 +40,7 @@ def getNumbers(tickets, main_low, main_high, main_picks, has_stars, star_low, st
                 starNums.pop(starChoice)
             if len(pickedStars) >= 2:
                 pickedStars.sort()
-            picked.append('--')
+            picked.append('-')
             for star in range(len(pickedStars)):
                 picked.append(pickedStars[star])
         showTickets.insert('end', picked)
@@ -66,7 +64,7 @@ def healthLottery():
     getLines.pack()
     getTickets = tk.Button(dispFrame, text='Generate Ticket(s)', bg=currBG, fg=currFG, command=lambda: getNumbers(getLines.get(), 1, 50, 5, False, 0, 0, 0))
     getTickets.pack(pady=10)
-    showTickets = tk.Listbox(dispFrame, width=20, height=10)
+    showTickets = tk.Listbox(dispFrame, width=30, height=10, font=ticketFont)
     showTickets.pack()
 
 
@@ -94,7 +92,7 @@ def nationalLottery():
     elif getGame.get() == 'Euromillions':
         getTickets = tk.Button(dispFrame, text='Generate Ticket(s)', bg=currBG, fg=currFG, command=nationalLotteryHandler)
     getTickets.pack(pady=10)
-    showTickets = tk.Listbox(dispFrame, width=20, height=10)
+    showTickets = tk.Listbox(dispFrame, width=30, height=10, font=ticketFont)
     showTickets.pack()
 
 
@@ -140,7 +138,7 @@ def customRaffle():
     starsNeeded.grid(row=3, column=1, sticky='w')
     spacer = tk.Label(customFrame, text='', bg=currBG, width=49)
     spacer.grid(row=4, column=0)
-    showTickets = tk.Listbox(dispFrame, width=20, height=10)
+    showTickets = tk.Listbox(dispFrame, width=30, height=10, font=ticketFont)
     showTickets.pack(pady=10)
 
 
@@ -165,7 +163,6 @@ def showStars():
         starNumbersHigh = ttk.Combobox(customFrame, value=numbers, width=8)
         starNumbersHigh.set('1')
         starNumbersHigh.grid(row=6, column=1, sticky='w')
-        
     else:
         starNumbersLabel.grid_forget()
         starNumbers.grid_forget()
@@ -180,7 +177,7 @@ root = tk.Tk()
 # Uncomment this next line if you want to remove the title bar. Then to close app use file menu to exit.
 ##root.attributes('-type', 'splash')
 root.title('Lottery / Raffle Number Generator')
-root.geometry("600x400")
+root.geometry("600x500")
 nums = [i for i in range(1, 50)]
 
 # Menu Tabs
