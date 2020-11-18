@@ -11,6 +11,7 @@ import os
 light = '#bcbcbc'
 dark = '#23272a'
 startupMode = dark
+numbers = [i for i in range(1, 1000001)] # Custom stars / raffle number range.
 
 
 def changeMode(bgMode, txtMode):
@@ -106,11 +107,79 @@ def nationalLotteryHandler():
         getNumbers(getLines.get(), 1, 50, 5, True, 1, 12, 2)
 
 
+def customRaffle():
+    global dispFrame, customFrame, starsNeededVar
+    dispFrame.destroy()
+    currBG = menu['bg']
+    currFG = menu['fg']
+    dispFrame = tk.Frame(root, bg=currBG)
+    dispFrame.pack(fill='both', expand=True)
+    game = tk.Label(dispFrame, text='Custom Lottery / Raffle', bg=currBG, fg=currFG)
+    game.pack(pady=10)
+    customFrame = tk.Frame(dispFrame, bg=currBG)
+    customFrame.pack()
+    mainNumbersLabel = tk.Label(customFrame, text='How many main numbers per draw do you require: ', bg=currBG, fg=currFG)
+    mainNumbersLabel.grid(row=0, column=0, sticky='e')
+    mainNumbers = ttk.Combobox(customFrame, value=numbers[:100], width=4)
+    mainNumbers.set('1')
+    mainNumbers.grid(row=0, column=1, sticky='w')
+    mainNumbersLowLabel = tk.Label(customFrame, text='Set the main lowest number: ', bg=currBG, fg=currFG)
+    mainNumbersLowLabel.grid(row=1, column=0, sticky='e')
+    mainNumbersLow = ttk.Combobox(customFrame, value=numbers[:10000], width=6)
+    mainNumbersLow.set('1')
+    mainNumbersLow.grid(row=1, column=1, pady=10, sticky='w')
+    mainNumbersHighLabel = tk.Label(customFrame, text='Set the main highest number: ', bg=currBG, fg=currFG)
+    mainNumbersHighLabel.grid(row=2, column=0, sticky='e')
+    mainNumbersHigh = ttk.Combobox(customFrame, value=numbers, width=8)
+    mainNumbersHigh.set('1')
+    mainNumbersHigh.grid(row=2, column=1, sticky='w')
+    starsNeededLabel = tk.Label(customFrame, text='Do you require any stars / bonus numbers? ', bg=currBG, fg=currFG)
+    starsNeededLabel.grid(row=3, column=0, pady=10, sticky='e')
+    starsNeededVar = tk.BooleanVar()
+    starsNeeded = tk.Checkbutton(customFrame, bg=currBG, variable=starsNeededVar, onvalue=True, offvalue=False, command=showStars)
+    starsNeeded.grid(row=3, column=1, sticky='w')
+    spacer = tk.Label(customFrame, text='', bg=currBG, width=49)
+    spacer.grid(row=4, column=0)
+    showTickets = tk.Listbox(dispFrame, width=20, height=10)
+    showTickets.pack(pady=10)
+
+
+def showStars():
+    global starNumbersLabel, starNumbers, starNumbersLowLabel, starNumbersLow, starNumbersHighLabel, starNumbersHigh
+    currBG = menu['bg']
+    currFG = menu['fg']
+    stars = starsNeededVar.get()
+    if stars:
+        starNumbersLabel = tk.Label(customFrame, text='How many stars / bonus numbers per draw do you require: ', bg=currBG, fg=currFG)
+        starNumbersLabel.grid(row=4, column=0, sticky='e')
+        starNumbers = ttk.Combobox(customFrame, value=numbers[:20], width=3)
+        starNumbers.set('1')
+        starNumbers.grid(row=4, column=1, sticky='w')
+        starNumbersLowLabel = tk.Label(customFrame, text='Set the stars / bonus lowest number: ', bg=currBG, fg=currFG)
+        starNumbersLowLabel.grid(row=5, column=0, pady=10, sticky='e')
+        starNumbersLow = ttk.Combobox(customFrame, value=numbers[:10000], width=6)
+        starNumbersLow.set('1')
+        starNumbersLow.grid(row=5, column=1, sticky='w')
+        starNumbersHighLabel = tk.Label(customFrame, text='Set the stars / bonus highest number: ', bg=currBG, fg=currFG)
+        starNumbersHighLabel.grid(row=6, column=0, sticky='e')
+        starNumbersHigh = ttk.Combobox(customFrame, value=numbers, width=8)
+        starNumbersHigh.set('1')
+        starNumbersHigh.grid(row=6, column=1, sticky='w')
+        
+    else:
+        starNumbersLabel.grid_forget()
+        starNumbers.grid_forget()
+        starNumbersLowLabel.grid_forget()
+        starNumbersLow.grid_forget()
+        starNumbersHighLabel.grid_forget()
+        starNumbersHigh.grid_forget()
+
+
 # Setup root window
 root = tk.Tk()
 # Uncomment this next line if you want to remove the title bar. Then to close app use file menu to exit.
 ##root.attributes('-type', 'splash')
-root.title('Lottery Picker')
+root.title('Lottery / Raffle Number Generator')
 root.geometry("600x400")
 nums = [i for i in range(1, 50)]
 
@@ -124,7 +193,7 @@ filemenu.add_separator()
 filemenu.add_command(label='UK Health Lottery', command=healthLottery)
 filemenu.add_command(label='UK National Lottery', command=nationalLottery)
 filemenu.add_separator()
-filemenu.add_command(label='Custom Raffle')
+filemenu.add_command(label='Custom Raffle', command=customRaffle)
 filemenu.add_separator()
 filemenu.add_command(label='Light Mode', command=lambda: changeMode(light, dark))
 filemenu.add_command(label='Dark Mode', command=lambda: changeMode(dark, light))
