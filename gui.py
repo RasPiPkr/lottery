@@ -19,6 +19,14 @@ def changeMode(bgMode, txtMode):
     root.config(bg=bgMode)
     menu.config(bg=bgMode, fg=txtMode)
     dispFrame.config(bg=bgMode)
+    try:
+        customFrame.config(bg=currBG)
+        mainNumbersLabel.config(bg=bgMode, fg=txtMode)
+        mainNumbersLowLabel.config(bg=bgMode, fg=txtMode)
+        mainNumbersHighLabel.config(bg=bgMode, fg=fgMode)
+    except:
+        pass
+
 
 def getNumbers(tickets, main_low, main_high, main_picks, has_stars, star_low, star_high, star_picks):
     for ticket in range(int(tickets)):
@@ -44,7 +52,6 @@ def getNumbers(tickets, main_low, main_high, main_picks, has_stars, star_low, st
             for star in range(len(pickedStars)):
                 picked.append(pickedStars[star])
         showTickets.insert('end', picked)
-        
 
 
 def healthLottery():
@@ -85,12 +92,6 @@ def nationalLottery():
     getLines = ttk.Combobox(dispFrame, width=3, values=lines)
     getLines.set('01')
     getLines.pack()
-##    if getGame.get() == 'Lotto':
-##        getTickets = tk.Button(dispFrame, text='Generate Ticket(s)', bg=currBG, fg=currFG, command=nationalLotteryHandler)
-##    elif getGame.get() == 'Thunderball':
-##        getTickets = tk.Button(dispFrame, text='Generate Ticket(s)', bg=currBG, fg=currFG, command=nationalLotteryHandler)
-##    elif getGame.get() == 'Euromillions':
-##        getTickets = tk.Button(dispFrame, text='Generate Ticket(s)', bg=currBG, fg=currFG, command=nationalLotteryHandler)
     getTickets = tk.Button(dispFrame, text='Generate Ticket(s)', bg=currBG, fg=currFG, command=nationalLotteryHandler)
     getTickets.pack(pady=10)
     showTickets = tk.Listbox(dispFrame, width=30, height=10, font=ticketFont)
@@ -108,7 +109,7 @@ def nationalLotteryHandler():
 
 def customRaffle():
     global dispFrame, showTickets, customFrame, starsNeededVar, getTickets
-    global mainNumbers, mainNumbersLow, mainNumbersHigh
+    global mainNumbers, mainNumbersLabel, mainNumbersLow, mainNumbersLowLabel, mainNumbersHigh, mainNumbersHighLabel
     dispFrame.destroy()
     currBG = menu['bg']
     currFG = menu['fg']
@@ -136,7 +137,7 @@ def customRaffle():
     starsNeededLabel = tk.Label(customFrame, text='Do you require any stars / bonus numbers? ', bg=currBG, fg=currFG)
     starsNeededLabel.grid(row=3, column=0, pady=10, sticky='e')
     starsNeededVar = tk.BooleanVar()
-    starsNeeded = tk.Checkbutton(customFrame, bg=currBG, variable=starsNeededVar, onvalue=True, offvalue=False, command=showStars)
+    starsNeeded = tk.Checkbutton(customFrame, bg=currBG, variable=starsNeededVar, onvalue=True, offvalue=False, bd=0, highlightbackground=currBG, command=showStars)
     starsNeeded.grid(row=3, column=1, sticky='w')
     spacer = tk.Label(customFrame, text='', bg=currBG, width=49)
     spacer.grid(row=4, column=0)
