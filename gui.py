@@ -53,16 +53,12 @@ def getNumbers(tickets, main_low, main_high, main_picks, has_stars, star_low, st
                 bonus.insert('', 'end', values=pickedStars)
     except IndexError:
         pass
-##            picked.append('-')
-##            for star in range(len(pickedStars)):
-##                picked.append(pickedStars[star])
 
 
 def setTicketLayout(event=None):
     global ticketFrame, showTickets, bonus
     ticketFrame.destroy()
     currBG = dispFrame['bg']
-##    cols = mainNumbers.get()
     ticketFrame = tk.Frame(root, bg=currBG)
     ticketFrame.pack(side='top')
     showTickets = ttk.Treeview(ticketFrame, columns=[str(i) for i in range(1, int(mainNumbers.get()) + 1)], show='headings', height=getLines.get()) 
@@ -113,8 +109,6 @@ def healthLottery():
     showTickets.heading(3, text='3')
     showTickets.heading(4, text='4')
     showTickets.heading(5, text='5')
-##    showTickets = tk.Listbox(dispFrame, width=30, height=10, font=ticketFont)
-##    showTickets.pack()
 
 
 def nationalLottery():
@@ -148,22 +142,16 @@ def nationalLottery():
     showTickets.column('4', width=50)
     showTickets.column('5', width=50)
     showTickets.column('6', width=50)
-##    showTickets.column('7', width=50)
-##    showTickets.column('8', width=50)
     showTickets.heading(1, text='1')
     showTickets.heading(2, text='2')
     showTickets.heading(3, text='3')
     showTickets.heading(4, text='4')
     showTickets.heading(5, text='5')
     showTickets.heading(6, text='6')
-##    showTickets.heading(7, text='7')
-##    showTickets.heading(8, text='8')
     bonus.column('1', width=50)
     bonus.column('2', width=50)
     bonus.heading(1, text='Bonus')
     bonus.heading(2, text='Bonus')
-##    showTickets = tk.Listbox(dispFrame, width=30, height=10, font=ticketFont)
-##    showTickets.pack()
 
 
 def nationalLotteryHandler():
@@ -208,8 +196,6 @@ def customRaffle():
     starsNeededVar = tk.BooleanVar()
     starsNeeded = tk.Checkbutton(customFrame, bg=currBG, variable=starsNeededVar, onvalue=True, offvalue=False, bd=0, highlightbackground=currBG, command=showStars)
     starsNeeded.grid(row=3, column=1, sticky='w')
-##    spacer = tk.Label(customFrame, text='', bg=currBG, width=49)
-##    spacer.grid(row=4, column=0)
     lines = [str(i).zfill(2) for i in range(1, 51)]
     linesLabel = tk.Label(customFrame, text='How many tickets:', bg=currBG, fg=currFG)
     linesLabel.grid(row=7, column=0, pady=10, sticky='e')
@@ -223,8 +209,6 @@ def customRaffle():
     ticketFrame.pack()
     showTickets = ttk.Treeview(ticketFrame, columns=[str(i) for i in range(1, int(mainNumbers.get()) + 1)], show='headings', height=str(getLines.get())) 
     showTickets.pack(side='left')
-##    showTickets = ttk.Treeview(ticketFrame, columns=(1), show='headings', height='5')
-##    showTickets.pack(side='left')
     showTickets.column('1', width=50)
     showTickets.heading(1, text='1')
 
@@ -252,7 +236,6 @@ def customHandler():
             else:
                 getNumbers(getLines.get(), mainNumbersLow.get(), mainNumbersHigh.get(), mainNumbers.get(), True, starNumbersLow.get(), starNumbersHigh.get(), starNumbers.get())
         else:
-##            treeviewAdj()
             getNumbers(getLines.get(), mainNumbersLow.get(), mainNumbersHigh.get(), mainNumbers.get(), False, 0, 0, 0)
     except ValueError:
         getTickets.config(text='Sorry, numerical digits required!')
@@ -339,8 +322,6 @@ helpmenu.add_command(label='About', command=about)
 # Startup screen
 dispFrame = tk.Frame(root)
 dispFrame.pack(fill='both', expand=True)
-##ticketFrame = tk.Frame(root, height=200)
-##ticketFrame.pack(side='bottom', fill='x')
 
 
 if startupMode == dark: # Depending on the startup mode this will set to light or dark mode.
