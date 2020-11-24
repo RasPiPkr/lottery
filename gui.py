@@ -58,30 +58,6 @@ def getNumbers(tickets, main_low, main_high, main_picks, has_stars, star_low, st
         pass
 
 
-def setTicketLayout(event=None):
-    global ticketFrame, showTickets, bonus, stars
-    ticketFrame.destroy()
-    currBG = dispFrame['bg']
-    ticketFrame = tk.Frame(root, bg=currBG)
-    ticketFrame.pack(side='top')
-    showTickets = ttk.Treeview(ticketFrame, columns=[str(i) for i in range(1, int(mainNumbers.get()) + 1)], show='headings', height=getLines.get()) 
-    showTickets.pack(side='left')
-    mainDigits = len(mainNumbersHigh.get())
-    for i in range(1, int(mainNumbers.get()) + 1):
-        showTickets.column(str(i), width=mainDigits * 10)
-        showTickets.heading(i, text=str(i))
-    try:
-        if stars:
-            starDigits = len(starNumbersHigh.get())
-            bonus = ttk.Treeview(ticketFrame, columns=[str(i) for i in range(1, int(starNumbers.get()) + 1)], show='headings', height=getLines.get())
-            bonus.pack(side='left', padx=5)
-            for i in range(1, int(starNumbers.get()) + 1):
-                bonus.column(str(i), width=starDigits * 10)
-                bonus.heading(i, text=str(i))
-    except NameError:
-        pass
-
-
 def healthLottery():
     global dispFrame, ticketFrame, showTickets, getLines
     dispFrame.destroy()
@@ -89,14 +65,14 @@ def healthLottery():
     currBG = menu['bg']
     currFG = menu['fg']
     dispFrame = tk.Frame(root, bg=currBG)
-    dispFrame.pack(fill='both', expand=True)
+    dispFrame.pack()
     ticketFrame = tk.Frame(root, bg=currBG)
-    ticketFrame.pack(side='bottom', fill='x')
+    ticketFrame.pack()
     game = tk.Label(dispFrame, text='Health Lottery', bg=currBG, fg=currFG)
-    game.pack()
-    lines = [str(i).zfill(2) for i in range(1, 51)]
+    game.pack(pady=10)
+    lines = [str(i).zfill(2) for i in range(1, 11)]
     linesLabel = tk.Label(dispFrame, text='How many lines:', bg=currBG, fg=currFG)
-    linesLabel.pack(pady=10)
+    linesLabel.pack()
     getLines = ttk.Combobox(dispFrame, width=3, values=lines)
     getLines.set('01')
     getLines.pack()
@@ -115,7 +91,7 @@ def healthLotteryHandler(event=None):
     ticketFrame.destroy()
     currBG = menu['bg']
     ticketFrame = tk.Frame(root, bg=currBG)
-    ticketFrame.pack(side='bottom', fill='x')
+    ticketFrame.pack()
     showTickets = ttk.Treeview(ticketFrame, columns=[i for i in range(1, 6)], show='headings', height=getLines.get())
     showTickets.pack(padx=20, pady=20)
     for i in range(1, 6):
@@ -124,46 +100,69 @@ def healthLotteryHandler(event=None):
 
 
 def nationalLottery():
-    global dispFrame, tiicketFrame, showTickets, getGame, games, getLines, bonus
+    global dispFrame, ticketFrame, showTickets, getGame, games, getLines, bonus
     dispFrame.destroy()
+    ticketFrame.destroy()
     currBG = menu['bg']
     currFG = menu['fg']
     dispFrame = tk.Frame(root, bg=currBG)
-    dispFrame.pack(fill='both', expand=True)
-    ticketFrame = tk.Frame(root, bg=currBG, height=200)
-    ticketFrame.pack(side='bottom', fill='x')
+    dispFrame.pack()
     games = ['Lotto', 'Thunderball', 'Euromillions']
     getGame = ttk.Combobox(dispFrame, values=games)
     getGame.set('Lotto')
-    getGame.pack()
-    lines = [str(i).zfill(2) for i in range(1, 51)]
+    getGame.pack(pady=20)
+    getGame.bind('<<ComboboxSelected>>', setNationalLayout)
+    lines = [str(i).zfill(2) for i in range(1, 11)]
     linesLabel = tk.Label(dispFrame, text='How many lines:', bg=currBG, fg=currFG)
-    linesLabel.pack(pady=10)
+    linesLabel.pack()
     getLines = ttk.Combobox(dispFrame, width=3, values=lines)
     getLines.set('01')
     getLines.pack()
+    getLines.bind('<<ComboboxSelected>>', setNationalLayout)
     getTickets = tk.Button(dispFrame, text='Generate Ticket(s)', bg=currBG, fg=currFG, command=nationalLotteryHandler)
     getTickets.pack(pady=10)
-    showTickets = ttk.Treeview(ticketFrame, columns=(1, 2, 3, 4, 5, 6), show='headings', height='5')
-    showTickets.pack(side='left')
-    bonus = ttk.Treeview(ticketFrame, columns=(1, 2), show='headings', height='5')
-    bonus.pack(side='left')
-    showTickets.column('1', width=50)
-    showTickets.column('2', width=50)
-    showTickets.column('3', width=50)
-    showTickets.column('4', width=50)
-    showTickets.column('5', width=50)
-    showTickets.column('6', width=50)
-    showTickets.heading(1, text='1')
-    showTickets.heading(2, text='2')
-    showTickets.heading(3, text='3')
-    showTickets.heading(4, text='4')
-    showTickets.heading(5, text='5')
-    showTickets.heading(6, text='6')
-    bonus.column('1', width=50)
-    bonus.column('2', width=50)
-    bonus.heading(1, text='Bonus')
-    bonus.heading(2, text='Bonus')
+    ticketFrame = tk.Frame(root, bg=currBG, height=200)
+    ticketFrame.pack()
+    showTickets = ttk.Treeview(ticketFrame, columns=[1, 2, 3, 4, 5, 6], show='headings', height='1')
+    showTickets.pack(pady=20)
+    for i in range(1, 7):
+        showTickets.column(i, width=30)
+        showTickets.heading(i, text=str(i))
+
+
+def setNationalLayout(event=None):
+    global ticketFrame, showTickets, bonus
+    ticketFrame.destroy()
+    currBG = dispFrame['bg']
+    ticketFrame = tk.Frame(root, bg=currBG)
+    ticketFrame.pack()
+    if getGame.get() == games[0]:
+        showTickets = ttk.Treeview(ticketFrame, columns=[1, 2, 3, 4, 5, 6], show='headings', height=getLines.get()) 
+        showTickets.pack(pady=20)
+        for i in range(1, 7):
+            showTickets.column(str(i), width=50)
+            showTickets.heading(i, text=str(i))
+    elif getGame.get() == games[1]:
+        showTickets = ttk.Treeview(ticketFrame, columns=[1, 2, 3, 4, 5], show='headings', height=getLines.get()) 
+        showTickets.pack(side='left', pady=20)
+        for i in range(1, 6):
+            showTickets.column(str(i), width=50)
+            showTickets.heading(i, text=str(i))
+        bonus = ttk.Treeview(ticketFrame, columns=[1], show='headings', height=getLines.get())
+        bonus.pack(side='left', padx=5)
+        bonus.column('1', width=100)
+        bonus.heading(1, text='Thunderball')
+    elif getGame.get() == games[2]:
+        showTickets = ttk.Treeview(ticketFrame, columns=[1, 2, 3, 4, 5], show='headings', height=getLines.get()) 
+        showTickets.pack(side='left', pady=20)
+        for i in range(1, 6):
+            showTickets.column(str(i), width=50)
+            showTickets.heading(i, text=str(i))
+        bonus = ttk.Treeview(ticketFrame, columns=[1, 2], show='headings', height=getLines.get())
+        bonus.pack(side='left', padx=5)
+        for i in range(1, 3):
+            bonus.column(str(i), width=70)
+            bonus.heading(i, text='Star {}'.format(i))
 
 
 def nationalLotteryHandler():
@@ -179,10 +178,11 @@ def customRaffle():
     global dispFrame, ticketFrame, showTickets, customFrame, starsNeededVar, getTickets, getLines
     global mainNumbers, mainNumbersLabel, mainNumbersLow, mainNumbersLowLabel, mainNumbersHigh, mainNumbersHighLabel
     dispFrame.destroy()
+    ticketFrame.destroy()
     currBG = menu['bg']
     currFG = menu['fg']
     dispFrame = tk.Frame(root, bg=currBG)
-    dispFrame.pack(side='top', fill='both', expand=True)
+    dispFrame.pack(side='top')
     game = tk.Label(dispFrame, text='Custom Lottery / Raffle', bg=currBG, fg=currFG)
     game.pack(pady=10)
     customFrame = tk.Frame(dispFrame, bg=currBG)
@@ -192,7 +192,7 @@ def customRaffle():
     mainNumbers = ttk.Combobox(customFrame, value=numbers[:100], width=4)
     mainNumbers.set('1')
     mainNumbers.grid(row=0, column=1, sticky='w')
-    mainNumbers.bind('<<ComboboxSelected>>', setTicketLayout)
+    mainNumbers.bind('<<ComboboxSelected>>', customLayout)
     mainNumbersLowLabel = tk.Label(customFrame, text='Set the main lowest number: ', bg=currBG, fg=currFG)
     mainNumbersLowLabel.grid(row=1, column=0, sticky='e')
     mainNumbersLow = ttk.Combobox(customFrame, value=numbers[:10000], width=6)
@@ -203,27 +203,56 @@ def customRaffle():
     mainNumbersHigh = ttk.Combobox(customFrame, value=numbers, width=8)
     mainNumbersHigh.set('2')
     mainNumbersHigh.grid(row=2, column=1, sticky='w')
-    mainNumbersHigh.bind('<<ComboboxSelected>>', setTicketLayout)
+    mainNumbersHigh.bind('<<ComboboxSelected>>', customLayout)
     starsNeededLabel = tk.Label(customFrame, text='Do you require any stars / bonus numbers? ', bg=currBG, fg=currFG)
     starsNeededLabel.grid(row=3, column=0, pady=10, sticky='e')
     starsNeededVar = tk.BooleanVar()
-    starsNeeded = tk.Checkbutton(customFrame, bg=currBG, variable=starsNeededVar, onvalue=True, offvalue=False, bd=0, highlightbackground=currBG, command=showStars)
+    starsNeeded = tk.Checkbutton(customFrame, bg=currBG, variable=starsNeededVar, onvalue=True, offvalue=False, bd=0, highlightbackground=currBG, command=customStars)
     starsNeeded.grid(row=3, column=1, sticky='w')
-    lines = [str(i).zfill(2) for i in range(1, 51)]
+    lines = [str(i).zfill(2) for i in range(1, 11)]
     linesLabel = tk.Label(customFrame, text='How many tickets:', bg=currBG, fg=currFG)
     linesLabel.grid(row=7, column=0, pady=10, sticky='e')
     getLines = ttk.Combobox(customFrame, width=3, values=lines)
     getLines.set('01')
     getLines.grid(row=7, column=1, sticky='w')
-    getLines.bind('<<ComboboxSelected>>', setTicketLayout)
-    getTickets = tk.Button(dispFrame, text='Generate Ticket(s)', bg=currBG, fg=currFG, command=customHandler)
+    getLines.bind('<<ComboboxSelected>>', customLayout)
+    getTickets = tk.Button(dispFrame, text='Generate Ticket(s)', bg=currBG, fg=currFG, command=preCustomHandler)
     getTickets.pack(pady=10)
     ticketFrame = tk.Frame(root, bg=currBG)
     ticketFrame.pack()
     showTickets = ttk.Treeview(ticketFrame, columns=[str(i) for i in range(1, int(mainNumbers.get()) + 1)], show='headings', height=str(getLines.get())) 
-    showTickets.pack(side='left')
+    showTickets.pack(side='left', pady=20)
     showTickets.column('1', width=15)
     showTickets.heading(1, text='1')
+
+
+def preCustomHandler():
+    customLayout()
+    customHandler()
+
+
+def customLayout(event=None):
+    global ticketFrame, showTickets, bonus, stars
+    ticketFrame.destroy()
+    currBG = dispFrame['bg']
+    ticketFrame = tk.Frame(root, bg=currBG)
+    ticketFrame.pack()
+    showTickets = ttk.Treeview(ticketFrame, columns=[str(i) for i in range(1, int(mainNumbers.get()) + 1)], show='headings', height=getLines.get()) 
+    showTickets.pack(side='left')
+    mainDigits = len(mainNumbersHigh.get()) + 1
+    for i in range(1, int(mainNumbers.get()) + 1):
+        showTickets.column(str(i), width=int(mainDigits * 15 / 1.5))
+        showTickets.heading(i, text=str(i))
+    try:
+        if stars:
+            starDigits = len(starNumbersHigh.get()) + 1
+            bonus = ttk.Treeview(ticketFrame, columns=[str(i) for i in range(1, int(starNumbers.get()) + 1)], show='headings', height=getLines.get())
+            bonus.pack(side='left', padx=5)
+            for i in range(1, int(starNumbers.get()) + 1):
+                bonus.column(str(i), width=int(starDigits * 15 / 1.5))
+                bonus.heading(i, text=str(i))
+    except NameError:
+        pass
 
 
 def customHandler():
@@ -256,7 +285,7 @@ def customHandler():
         root.after(3000, getTickets.config(text='Generate Ticket(s)'))
 
 
-def showStars():
+def customStars():
     global starNumbersLabel, starNumbers, starNumbersLowLabel, starNumbersLow, starNumbersHighLabel, starNumbersHigh, stars, bonus
     currBG = menu['bg']
     currFG = menu['fg']
@@ -267,7 +296,7 @@ def showStars():
         starNumbers = ttk.Combobox(customFrame, value=numbers[:20], width=3)
         starNumbers.set('1')
         starNumbers.grid(row=4, column=1, sticky='w')
-        starNumbers.bind('<<ComboboxSelected>>', setTicketLayout)
+        starNumbers.bind('<<ComboboxSelected>>', customLayout)
         starNumbersLowLabel = tk.Label(customFrame, text='Set the stars / bonus lowest number: ', bg=currBG, fg=currFG)
         starNumbersLowLabel.grid(row=5, column=0, pady=10, sticky='e')
         starNumbersLow = ttk.Combobox(customFrame, value=numbers[:10000], width=6)
@@ -278,10 +307,10 @@ def showStars():
         starNumbersHigh = ttk.Combobox(customFrame, value=numbers, width=8)
         starNumbersHigh.set('2')
         starNumbersHigh.grid(row=6, column=1, sticky='w')
-        starNumbersHigh.bind('<<ComboboxSelected>>', setTicketLayout)
+        starNumbersHigh.bind('<<ComboboxSelected>>', customLayout)
         bonus = ttk.Treeview(ticketFrame, columns=(1), show='headings', height=getLines.get())
         bonus.pack(side='left', padx=5)
-        bonus.column('1', width=10)
+        bonus.column('1', width=15)
         bonus.heading(1, text='1')
     else:
         starNumbersLabel.grid_forget()
@@ -313,8 +342,7 @@ root = tk.Tk()
 # Uncomment this next line if you want to remove the title bar. Then to close app use file menu to exit.
 ##root.attributes('-type', 'splash')
 root.title('Lottery / Raffle Number Generator')
-root.geometry("600x500")
-nums = [i for i in range(1, 50)]
+root.geometry("600x600")
 
 # Menu Tabs
 menu = tk.Menu(root)
@@ -337,10 +365,10 @@ helpmenu.add_command(label='About', command=about)
 dispFrame = tk.Frame(root)
 dispFrame.pack(fill='both', expand=True)
 ticketFrame = tk.Frame(root)
-ticketFrame.pack(side='bottom', fill='x')
+ticketFrame.pack()
 
 
-if startupMode == dark: # Depending on the startup mode this will set to light or dark mode.
+if startupMode == dark:
     changeMode(bgMode=dark, txtMode=light)
 else:
     changeMode(bgMode=light, txtMode=dark)
