@@ -12,7 +12,6 @@ light = '#bcbcbc'
 dark = '#23272a'
 startupMode = dark
 numbers = [i for i in range(1, 1000001)] # Custom stars / raffle number range.
-ticketFont = ('verdana', 20)
 
 
 def changeMode(bgMode, txtMode):
@@ -22,11 +21,30 @@ def changeMode(bgMode, txtMode):
     helpmenu.config(bg=bgMode, fg=txtMode)
     dispFrame.config(bg=bgMode)
     ticketFrame.config(bg=bgMode)
-    try:
-        customFrame.config(bg=currBG)
+    getTickets.config(bg=bgMode, fg=txtMode)
+    try: # healthLottery
+        game.config(bg=bgMode, fg=txtMode)
+    except:
+        pass
+    try: # nationalLottery
+        linesLabel.config(bg=bgMode, fg=txtMode)
+    except:
+        pass
+    try: # customLottery main
+        customFrame.config(bg=bgMode)
+        game.config(bg=bgMode, fg=txtMode)
+        starsNeededLabel.config(bg=bgMode, fg=txtMode)
         mainNumbersLabel.config(bg=bgMode, fg=txtMode)
         mainNumbersLowLabel.config(bg=bgMode, fg=txtMode)
-        mainNumbersHighLabel.config(bg=bgMode, fg=fgMode)
+        mainNumbersHighLabel.config(bg=bgMode, fg=txtMode)
+        starsNeeded.config(bg=bgMode, fg=txtMode, highlightbackground=bgMode)
+        linesLabel.config(bg=bgMode, fg=txtMode)
+    except:
+        pass
+    try: # customLottery stars
+        starNumbersLabel.config(bg=bgMode, fg=txtMode)
+        starNumbersLowLabel.config(bg=bgMode, fg=txtMode)
+        starNumbersHighLabel.config(bg=bgMode, fg=txtMode)
     except:
         pass
 
@@ -58,26 +76,24 @@ def getNumbers(tickets, main_low, main_high, main_picks, has_stars, star_low, st
         pass
 
 
-def healthLottery():
-    global dispFrame, ticketFrame, showTickets, getLines
+def healthLottery(bgMode, txtMode):
+    global dispFrame, ticketFrame, showTickets, game, linesLabel, getLines, getTickets
     dispFrame.destroy()
     ticketFrame.destroy()
-    currBG = menu['bg']
-    currFG = menu['fg']
-    dispFrame = tk.Frame(root, bg=currBG)
+    dispFrame = tk.Frame(root, bg=bgMode)
     dispFrame.pack()
-    ticketFrame = tk.Frame(root, bg=currBG)
+    ticketFrame = tk.Frame(root, bg=bgMode)
     ticketFrame.pack()
-    game = tk.Label(dispFrame, text='Health Lottery', bg=currBG, fg=currFG)
+    game = tk.Label(dispFrame, text='Health Lottery', bg=bgMode, fg=txtMode)
     game.pack(pady=10)
     lines = [str(i).zfill(2) for i in range(1, 11)]
-    linesLabel = tk.Label(dispFrame, text='How many lines:', bg=currBG, fg=currFG)
+    linesLabel = tk.Label(dispFrame, text='How many lines:', bg=bgMode, fg=txtMode)
     linesLabel.pack()
     getLines = ttk.Combobox(dispFrame, width=3, values=lines)
     getLines.set('01')
     getLines.pack()
     getLines.bind('<<ComboboxSelected>>', healthLotteryHandler)
-    getTickets = tk.Button(dispFrame, text='Generate Ticket(s)', bg=currBG, fg=currFG, command=lambda: getNumbers(getLines.get(), 1, 50, 5, False, 0, 0, 0))
+    getTickets = tk.Button(dispFrame, text='Generate Ticket(s)', bg=bgMode, fg=txtMode, command=lambda: getNumbers(getLines.get(), 1, 50, 5, False, 0, 0, 0))
     getTickets.pack(pady=10)
     showTickets = ttk.Treeview(ticketFrame, columns=[i for i in range(1, 6)], show='headings', height=getLines.get())
     showTickets.pack(padx=20, pady=20)
@@ -99,13 +115,11 @@ def healthLotteryHandler(event=None):
         showTickets.heading(i, text=str(i))
 
 
-def nationalLottery():
-    global dispFrame, ticketFrame, showTickets, getGame, games, getLines, bonus
+def nationalLottery(bgMode, txtMode):
+    global dispFrame, ticketFrame, showTickets, getGame, games, linesLabel, getLines, bonus, getTickets
     dispFrame.destroy()
     ticketFrame.destroy()
-    currBG = menu['bg']
-    currFG = menu['fg']
-    dispFrame = tk.Frame(root, bg=currBG)
+    dispFrame = tk.Frame(root, bg=bgMode)
     dispFrame.pack()
     games = ['Lotto', 'Thunderball', 'Euromillions']
     getGame = ttk.Combobox(dispFrame, values=games)
@@ -113,15 +127,15 @@ def nationalLottery():
     getGame.pack(pady=20)
     getGame.bind('<<ComboboxSelected>>', setNationalLayout)
     lines = [str(i).zfill(2) for i in range(1, 11)]
-    linesLabel = tk.Label(dispFrame, text='How many lines:', bg=currBG, fg=currFG)
+    linesLabel = tk.Label(dispFrame, text='How many lines:', bg=bgMode, fg=txtMode)
     linesLabel.pack()
     getLines = ttk.Combobox(dispFrame, width=3, values=lines)
     getLines.set('01')
     getLines.pack()
     getLines.bind('<<ComboboxSelected>>', setNationalLayout)
-    getTickets = tk.Button(dispFrame, text='Generate Ticket(s)', bg=currBG, fg=currFG, command=nationalLotteryHandler)
+    getTickets = tk.Button(dispFrame, text='Generate Ticket(s)', bg=bgMode, fg=txtMode, command=nationalLotteryHandler)
     getTickets.pack(pady=10)
-    ticketFrame = tk.Frame(root, bg=currBG, height=200)
+    ticketFrame = tk.Frame(root, bg=bgMode, height=200)
     ticketFrame.pack()
     showTickets = ttk.Treeview(ticketFrame, columns=[1, 2, 3, 4, 5, 6], show='headings', height='1')
     showTickets.pack(pady=20)
@@ -133,8 +147,8 @@ def nationalLottery():
 def setNationalLayout(event=None):
     global ticketFrame, showTickets, bonus
     ticketFrame.destroy()
-    currBG = dispFrame['bg']
-    ticketFrame = tk.Frame(root, bg=currBG)
+    bgMode = menu['bg']
+    ticketFrame = tk.Frame(root, bg=bgMode)
     ticketFrame.pack()
     if getGame.get() == games[0]:
         showTickets = ttk.Treeview(ticketFrame, columns=[1, 2, 3, 4, 5, 6], show='headings', height=getLines.get()) 
@@ -174,51 +188,49 @@ def nationalLotteryHandler():
         getNumbers(getLines.get(), 1, 50, 5, True, 1, 12, 2)
 
 
-def customRaffle():
-    global dispFrame, ticketFrame, showTickets, customFrame, starsNeededVar, getTickets, getLines
-    global mainNumbers, mainNumbersLabel, mainNumbersLow, mainNumbersLowLabel, mainNumbersHigh, mainNumbersHighLabel
+def customRaffle(bgMode, txtMode):
+    global dispFrame, ticketFrame, showTickets, customFrame, starsNeededVar, starsNeeded, starsNeededLabel, getTickets, getLines, game
+    global mainNumbers, mainNumbersLabel, mainNumbersLow, mainNumbersLowLabel, mainNumbersHigh, mainNumbersHighLabel, linesLabel
     dispFrame.destroy()
     ticketFrame.destroy()
-    currBG = menu['bg']
-    currFG = menu['fg']
-    dispFrame = tk.Frame(root, bg=currBG)
+    dispFrame = tk.Frame(root, bg=bgMode)
     dispFrame.pack(side='top')
-    game = tk.Label(dispFrame, text='Custom Lottery / Raffle', bg=currBG, fg=currFG)
+    game = tk.Label(dispFrame, text='Custom Lottery / Raffle', bg=bgMode, fg=txtMode)
     game.pack(pady=10)
-    customFrame = tk.Frame(dispFrame, bg=currBG)
+    customFrame = tk.Frame(dispFrame, bg=bgMode)
     customFrame.pack()
-    mainNumbersLabel = tk.Label(customFrame, text='How many main numbers per draw do you require: ', bg=currBG, fg=currFG)
+    mainNumbersLabel = tk.Label(customFrame, text='How many main numbers per draw do you require: ', bg=bgMode, fg=txtMode)
     mainNumbersLabel.grid(row=0, column=0, sticky='e')
     mainNumbers = ttk.Combobox(customFrame, value=numbers[:100], width=4)
     mainNumbers.set('1')
     mainNumbers.grid(row=0, column=1, sticky='w')
     mainNumbers.bind('<<ComboboxSelected>>', customLayout)
-    mainNumbersLowLabel = tk.Label(customFrame, text='Set the main lowest number: ', bg=currBG, fg=currFG)
+    mainNumbersLowLabel = tk.Label(customFrame, text='Set the main lowest number: ', bg=bgMode, fg=txtMode)
     mainNumbersLowLabel.grid(row=1, column=0, sticky='e')
     mainNumbersLow = ttk.Combobox(customFrame, value=numbers[:10000], width=6)
     mainNumbersLow.set('1')
     mainNumbersLow.grid(row=1, column=1, pady=10, sticky='w')
-    mainNumbersHighLabel = tk.Label(customFrame, text='Set the main highest number: ', bg=currBG, fg=currFG)
+    mainNumbersHighLabel = tk.Label(customFrame, text='Set the main highest number: ', bg=bgMode, fg=txtMode)
     mainNumbersHighLabel.grid(row=2, column=0, sticky='e')
     mainNumbersHigh = ttk.Combobox(customFrame, value=numbers, width=8)
     mainNumbersHigh.set('2')
     mainNumbersHigh.grid(row=2, column=1, sticky='w')
     mainNumbersHigh.bind('<<ComboboxSelected>>', customLayout)
-    starsNeededLabel = tk.Label(customFrame, text='Do you require any stars / bonus numbers? ', bg=currBG, fg=currFG)
+    starsNeededLabel = tk.Label(customFrame, text='Do you require any stars / bonus numbers? ', bg=bgMode, fg=txtMode)
     starsNeededLabel.grid(row=3, column=0, pady=10, sticky='e')
     starsNeededVar = tk.BooleanVar()
-    starsNeeded = tk.Checkbutton(customFrame, bg=currBG, variable=starsNeededVar, onvalue=True, offvalue=False, bd=0, highlightbackground=currBG, command=customStars)
+    starsNeeded = tk.Checkbutton(customFrame, bg=bgMode, variable=starsNeededVar, onvalue=True, offvalue=False, bd=0, highlightbackground=bgMode, command=customStars)
     starsNeeded.grid(row=3, column=1, sticky='w')
     lines = [str(i).zfill(2) for i in range(1, 11)]
-    linesLabel = tk.Label(customFrame, text='How many tickets:', bg=currBG, fg=currFG)
+    linesLabel = tk.Label(customFrame, text='How many tickets:', bg=bgMode, fg=txtMode)
     linesLabel.grid(row=7, column=0, pady=10, sticky='e')
     getLines = ttk.Combobox(customFrame, width=3, values=lines)
     getLines.set('01')
     getLines.grid(row=7, column=1, sticky='w')
     getLines.bind('<<ComboboxSelected>>', customLayout)
-    getTickets = tk.Button(dispFrame, text='Generate Ticket(s)', bg=currBG, fg=currFG, command=preCustomHandler)
+    getTickets = tk.Button(dispFrame, text='Generate Ticket(s)', bg=bgMode, fg=txtMode, command=preCustomHandler)
     getTickets.pack(pady=10)
-    ticketFrame = tk.Frame(root, bg=currBG)
+    ticketFrame = tk.Frame(root, bg=bgMode)
     ticketFrame.pack()
     showTickets = ttk.Treeview(ticketFrame, columns=[str(i) for i in range(1, int(mainNumbers.get()) + 1)], show='headings', height=str(getLines.get())) 
     showTickets.pack(side='left', pady=20)
@@ -234,7 +246,7 @@ def preCustomHandler():
 def customLayout(event=None):
     global ticketFrame, showTickets, bonus, stars
     ticketFrame.destroy()
-    currBG = dispFrame['bg']
+    currBG = menu['bg']
     ticketFrame = tk.Frame(root, bg=currBG)
     ticketFrame.pack()
     showTickets = ttk.Treeview(ticketFrame, columns=[str(i) for i in range(1, int(mainNumbers.get()) + 1)], show='headings', height=getLines.get()) 
@@ -287,22 +299,22 @@ def customHandler():
 
 def customStars():
     global starNumbersLabel, starNumbers, starNumbersLowLabel, starNumbersLow, starNumbersHighLabel, starNumbersHigh, stars, bonus
-    currBG = menu['bg']
-    currFG = menu['fg']
+    bgMode = menu['bg']
+    txtMode = menu['fg']
     stars = starsNeededVar.get()
     if stars:
-        starNumbersLabel = tk.Label(customFrame, text='How many stars / bonus numbers do you require: ', bg=currBG, fg=currFG)
+        starNumbersLabel = tk.Label(customFrame, text='How many stars / bonus numbers do you require: ', bg=bgMode, fg=txtMode)
         starNumbersLabel.grid(row=4, column=0, sticky='e')
         starNumbers = ttk.Combobox(customFrame, value=numbers[:20], width=3)
         starNumbers.set('1')
         starNumbers.grid(row=4, column=1, sticky='w')
         starNumbers.bind('<<ComboboxSelected>>', customLayout)
-        starNumbersLowLabel = tk.Label(customFrame, text='Set the stars / bonus lowest number: ', bg=currBG, fg=currFG)
+        starNumbersLowLabel = tk.Label(customFrame, text='Set the stars / bonus lowest number: ', bg=bgMode, fg=txtMode)
         starNumbersLowLabel.grid(row=5, column=0, pady=10, sticky='e')
         starNumbersLow = ttk.Combobox(customFrame, value=numbers[:10000], width=6)
         starNumbersLow.set('1')
         starNumbersLow.grid(row=5, column=1, sticky='w')
-        starNumbersHighLabel = tk.Label(customFrame, text='Set the stars / bonus highest number: ', bg=currBG, fg=currFG)
+        starNumbersHighLabel = tk.Label(customFrame, text='Set the stars / bonus highest number: ', bg=bgMode, fg=txtMode)
         starNumbersHighLabel.grid(row=6, column=0, sticky='e')
         starNumbersHigh = ttk.Combobox(customFrame, value=numbers, width=8)
         starNumbersHigh.set('2')
@@ -322,19 +334,74 @@ def customStars():
         bonus.destroy()
 
 
-def about():
-    global dispFrame
+def aboutMode(bgMode, txtMode):
+    root.config(bg=bgMode)
+    dispFrame.config(bg=bgMode)
+    menu.config(bg=bgMode, fg=txtMode)
+    filemenu.config(bg=bgMode, fg=txtMode)
+    helpmenu.config(bg=bgMode, fg=txtMode)
+    title.config(bg=bgMode, fg=txtMode)
+    line.config(bg=bgMode, fg=txtMode)
+    line2.config(bg=bgMode, fg=txtMode)
+
+
+
+def about(bgMode, txtMode):
+    global dispFrame, ticketFrame, menu, filemenu, helpmenu, title, line, line2
+    menu = tk.Menu(root, bg=bgMode, fg=txtMode)
+    root.config(menu=menu) 
+    filemenu = tk.Menu(menu, bg=bgMode, fg=txtMode, tearoff=0) 
+    menu.add_cascade(label='File', menu=filemenu) 
+    filemenu.add_command(label='Exit', command=root.destroy)
+    filemenu.add_separator()
+    filemenu.add_command(label='UK Health Lottery', command=lambda: healthLottery(bgMode, txtMode))
+    filemenu.add_command(label='UK National Lottery', command=lambda: nationalLottery(bgMode, txtMode))
+    filemenu.add_separator()
+    filemenu.add_command(label='Custom Raffle', command=lambda: customRaffle(bgMode, txtMode))
+    filemenu.add_separator()
+    filemenu.add_command(label='Light Mode', command=lambda: aboutMode(light, dark))
+    filemenu.add_command(label='Dark Mode', command=lambda: aboutMode(dark, light))
+    helpmenu = tk.Menu(menu, bg=bgMode, fg=txtMode, tearoff=0) 
+    menu.add_cascade(label='Help', menu=helpmenu) 
+    helpmenu.add_command(label='About', command=lambda: about(bgMode, txtMode))
     dispFrame.destroy()
-    currBG = menu['bg']
-    currFG = menu['fg']
-    dispFrame = tk.Frame(root, bg=currBG)
+    ticketFrame.destroy()
+    dispFrame = tk.Frame(root, bg=bgMode)
     dispFrame.pack(fill='both', expand=True)
-    title = tk.Label(dispFrame, text='Thank you for downloading the Worldwide Lottery / Raffle Number Generator', bg=currBG, fg=currFG)
+    title = tk.Label(dispFrame, text='Thank you for downloading the Worldwide Lottery / Raffle Number Generator', bg=bgMode, fg=txtMode)
     title.pack(pady=30)
-    line = tk.Label(dispFrame, text='This project was initially started by Martin Parker in the UK,', bg=currBG, fg=currFG)
+    line = tk.Label(dispFrame, text='This project was initially started by Martin Parker in the UK,', bg=bgMode, fg=txtMode)
     line.pack(pady=10)
-    line2 = tk.Label(dispFrame, text='in order that people could contribute all around the world.', bg=currBG, fg=currFG)
+    line2 = tk.Label(dispFrame, text='in order that people could contribute all around the world.', bg=bgMode, fg=txtMode)
     line2.pack(pady=10)
+    ticketFrame = tk.Frame(root, bg=bgMode)
+    ticketFrame.pack()
+
+
+def main(bgMode, txtMode):
+    global dispFrame, ticketFrame, menu, filemenu, helpmenu 
+    # Menu Tabs
+    menu = tk.Menu(root, bg=bgMode, fg=txtMode)
+    root.config(menu=menu, bg=bgMode) 
+    filemenu = tk.Menu(menu, bg=bgMode, fg=txtMode, tearoff=0) 
+    menu.add_cascade(label='File', menu=filemenu) 
+    filemenu.add_command(label='Exit', command=root.destroy)
+    filemenu.add_separator()
+    filemenu.add_command(label='UK Health Lottery', command=lambda: healthLottery(bgMode, txtMode))
+    filemenu.add_command(label='UK National Lottery', command=lambda: nationalLottery(bgMode, txtMode))
+    filemenu.add_separator()
+    filemenu.add_command(label='Custom Raffle', command=lambda: customRaffle(bgMode, txtMode))
+    filemenu.add_separator()
+    filemenu.add_command(label='Light Mode', command=lambda: changeMode(light, dark))
+    filemenu.add_command(label='Dark Mode', command=lambda: changeMode(dark, light))
+    helpmenu = tk.Menu(menu, bg=bgMode, fg=txtMode, tearoff=0) 
+    menu.add_cascade(label='Help', menu=helpmenu) 
+    helpmenu.add_command(label='About', command=lambda: about(bgMode, txtMode))
+    # Startup screen
+    dispFrame = tk.Frame(root, bg=bgMode)
+    dispFrame.pack(fill='both', expand=True)
+    ticketFrame = tk.Frame(root, bg=bgMode)
+    ticketFrame.pack()
     
 
 # Setup root window
@@ -344,33 +411,10 @@ root = tk.Tk()
 root.title('Lottery / Raffle Number Generator')
 root.geometry("600x600")
 
-# Menu Tabs
-menu = tk.Menu(root)
-root.config(menu=menu) 
-filemenu = tk.Menu(menu, tearoff=0) 
-menu.add_cascade(label='File', menu=filemenu) 
-filemenu.add_command(label='Exit', command=root.destroy)
-filemenu.add_separator()
-filemenu.add_command(label='UK Health Lottery', command=healthLottery)
-filemenu.add_command(label='UK National Lottery', command=nationalLottery)
-filemenu.add_separator()
-filemenu.add_command(label='Custom Raffle', command=customRaffle)
-filemenu.add_separator()
-filemenu.add_command(label='Light Mode', command=lambda: changeMode(light, dark))
-filemenu.add_command(label='Dark Mode', command=lambda: changeMode(dark, light))
-helpmenu = tk.Menu(menu, tearoff=0) 
-menu.add_cascade(label='Help', menu=helpmenu) 
-helpmenu.add_command(label='About', command=about)
-# Startup screen
-dispFrame = tk.Frame(root)
-dispFrame.pack(fill='both', expand=True)
-ticketFrame = tk.Frame(root)
-ticketFrame.pack()
-
 
 if startupMode == dark:
-    changeMode(bgMode=dark, txtMode=light)
+    main(dark, light)
 else:
-    changeMode(bgMode=light, txtMode=dark)
+    main(light, dark)
     
 root.mainloop()
